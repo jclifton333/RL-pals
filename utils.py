@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 def compute_Qmu(alpha, J_mu, mdp):
     '''
@@ -40,3 +41,24 @@ def policy_iteration(alpha, mdp, nIt):
         mu_k = mu_kp1
     return Js, mus
 
+def plot_policy(env, Js, mus, nIt=7):
+  for (J, mu) in zip(Js[:nIt], mus[:nIt]):
+      plt.figure(figsize=(3,3))
+      plt.imshow(J.reshape(4,4), cmap='gray', interpolation='none', clim=(0,1))
+      ax = plt.gca()
+      ax.set_xticks(np.arange(4)-.5)
+      ax.set_yticks(np.arange(4)-.5)
+      ax.set_xticklabels([])
+      ax.set_yticklabels([])
+      Y, X = np.mgrid[0:4, 0:4]
+      a2uv = {0: (-1, 0), 1:(0, -1), 2:(1,0), 3:(-1, 0)}
+      Mu = mu.reshape(4,4)
+      for y in range(4):
+          for x in range(4):
+              a = Mu[y, x]
+              u, v = a2uv[a]
+              plt.arrow(x, y,u*.3, -v*.3, color='m', head_width=0.1, head_length=0.1) 
+              plt.text(x, y, str(env.desc[y,x].item().decode()),
+                       color='g', size=12,  verticalalignment='center',
+                       horizontalalignment='center', fontweight='bold')
+      plt.grid(color='b', lw=2, ls='-')
