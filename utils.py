@@ -28,7 +28,7 @@ def compute_Jmu(alpha, mdp, mu):
     J[mdp.transient] = np.linalg.solve(np.identity(mdp.nS-5)-alpha*P_mu, g_mu)    
     return J
 
-def policy_iteration(alpha, mdp, nIt):
+def policy_iteration(mdp, alpha, nIt):
     mu_k = np.zeros(mdp.nS,dtype='int') #Initialize policy
     mus = [mu_k]   #Lists to collect iterates
     Js = []
